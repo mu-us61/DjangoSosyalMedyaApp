@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}
+    Profile Page
+{% endblock title %}
+{% block content %}
+    <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
+        <h2 class="text-2xl font-bold text-center mb-6">Profile</h2>
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}<p class="text-red-500 text-sm">{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+        <form action=""
+              method="post"
+              enctype="multipart/form-data"
+              class="space-y-4">
+            {% csrf_token %}
+            <!-- Bio Field -->
+            <div>
+                <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                <textarea name="bio"
+                          id="bio"
+                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ user.profile.bio }}</textarea>
+            </div>
+            <!-- Location Field -->
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                <input type="text"
+                       name="location"
+                       id="location"
+                       value="{{ user.profile.location }}"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <!-- Picture Field -->
+            <div>
+                <label for="picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <input type="file"
+                       name="picture"
+                       id="picture"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+        <!-- Display Current Profile Picture -->
+        {% if user.profile.picture %}
+            <div class="mt-6">
+                <h3 class="text-lg font-medium text-gray-900">Current Profile Picture:</h3>
+                <img src="{{ user.profile.picture.url }}"
+                     width="128"
+                     height="128"
+                     alt="Profile Picture"
+                     class="mt-2 w-32 h-32 object-cover rounded-full border-2 border-gray-300">
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
+{# 
+    <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-8">
+        <h2 class="text-2xl font-bold text-center mb-6">Profile</h2>
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}<p class="text-red-500 text-sm">{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+        <form action="" method="post" class="space-y-4">
+            {% csrf_token %}
+            <!-- Bio Field -->
+            <div>
+                <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                <input type="text" name="bio" id="bio" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                <input type="text" name="location" id="location" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="picture" class="block text-sm font-medium text-gray-700">Picture</label>
+                <input type="text" name="picture" id="picture" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+
+#}

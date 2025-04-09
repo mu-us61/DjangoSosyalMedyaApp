@@ -128,3 +128,4 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "static_server"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+LOGIN_URL = "login"

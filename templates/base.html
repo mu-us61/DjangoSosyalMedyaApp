@@ -17,27 +17,46 @@
             {% endblock title %}
         </title>
     </head>
-    <body>
-        <header>
-            <h1>My Website</h1>
-            <nav>
-                <ul>
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-                    <li>
-                        <a href="/about">About</a>
-                    </li>
-                </ul>
-            </nav>
+    <body class="flex flex-col min-h-screen">
+        <header class="bg-blue-600 text-white py-4 px-6">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">My Website</h1>
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li>
+                            <a href="{% url 'home' %}" class="hover:text-gray-300">HomePage</a>
+                        </li>
+                        <!-- <li>
+                            <a href="/about" class="hover:text-gray-300">About</a>
+                        </li> -->
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'profile' %}" class="hover:text-gray-300">Hello {{ user.username }}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'logout' %}" class="hover:text-gray-300">Logout</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'login' %}" class="hover:text-gray-300">Login</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'register' %}" class="hover:text-gray-300">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </header>
-        <main>
-            {% block content %}
-                <p>hello world from base.html</p>
-            {% endblock content %}
+        <main class="flex-grow container mx-auto py-8 px-6">
+            <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+                {% block content %}
+                    <p class="text-gray-700 text-lg">hello world from base.html</p>
+                {% endblock content %}
+            </div>
         </main>
-        <footer>
-            copyrights reserved
+        <footer class="bg-gray-800 text-white py-4 px-6 mt-8">
+            <div class="container mx-auto text-center">© 2025 My Website. All rights reserved.</div>
         </footer>
     </body>
 </html>
