@@ -1,0 +1,12 @@
+<div class="mb-6 p-4 border rounded-lg shadow-sm">
+    <p class="font-bold">{{ post.user.username }}: {{ post.caption }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}"
+             alt="Post image"
+             width="300"
+             height="200"
+             class="mt-2 w-full h-48 object-cover rounded">
+    {% else %}
+        <p class="text-gray-500">No image available</p>
+    {% endif %}
+</div>

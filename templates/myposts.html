@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    my Posts
+{% endblock title %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% for post in user.posts.all %}
+            {% include 'component_post.html' with post=post %}
+        {% endfor %}
+    {% else %}
+        <p>please login to view your posts</p>
+    {% endif %}
+{% endblock content %}

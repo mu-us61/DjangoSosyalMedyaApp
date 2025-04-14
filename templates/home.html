@@ -1,7 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}
-    homepage
+    Homepage
 {% endblock title %}
 {% block content %}
-    homepage
+    <div class="flex">
+        <!-- Feed Section -->
+        <div class="flex-1 pr-8">
+            {% if posts %}
+                {% for post in posts %}
+                    {% include 'component_post.html' with post=post %}
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-500">No posts available</p>
+            {% endif %}
+        </div>
+        <!-- Suggestions Panel -->
+        <div class="w-64 pl-8 border-l">
+            <h3 class="text-xl font-semibold mb-4">Suggestions</h3>
+            {% if suggested_users %}
+                <ul class="space-y-2">
+                    {% for profile in suggested_users %}
+                        <li class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
+                            <span>{{ profile.user.username }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-500">No suggestions available</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock content %}

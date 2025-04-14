@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, login, logout, get_user
-from .models import Profile
+from .models import Profile, Post
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -10,7 +10,21 @@ DEFAULT_REDIRECT_URL = "home"
 
 
 def home(request):
-    return render(request, "home.html")
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        followed_users = profile.following.all()
+        posts = Post.objects.filter(user__profile__in=followed_users).order_by("-created_at")
+
+        # Suggest users that the authenticated user is NOT following
+        suggested_users = (
+            Profile.objects.exclude(id__in=followed_users.values_list("id", flat=True))
+            .exclude(user=request.user)  # Exclude the authenticated user
+            .order_by("?")[:5]
+        )  # Limit to 5 suggestions
+
+        return render(request, "home.html", {"posts": posts, "suggested_users": suggested_users})
+    else:
+        return render(request, "home.html")
 
 
 def myregister(request):
@@ -80,3 +94,22 @@ def profile(request):
         return redirect("profile")
 
     return render(request, "profile.html", {"user": user})
+
+
+def createpost(request):
+    user = request.user
+    if request.method == "POST":
+        caption = request.POST.get("caption")
+        image = request.FILES.get("image")
+        if image:
+            Post.objects.create(caption=caption, user=user, image=image)
+            return redirect("home")
+    return render(request, "createpost.html")
+
+
+def postdetail(request):
+    return render(request, "postdetail.html")
+
+
+def myposts(request):
+    return render(request, "myposts.html")

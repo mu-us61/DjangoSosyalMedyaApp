@@ -13,6 +13,8 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     picture = models.ImageField(upload_to="profilePictures/", blank=True, null=True, default="default_profile.png")
     location = models.CharField(max_length=100, blank=True)
+    followers = models.ManyToManyField("self", symmetrical=False, related_name="followed_by", blank=True)
+    following = models.ManyToManyField("self", symmetrical=False, related_name="follows", blank=True)
 
     def __str__(self):
         if self.user:
