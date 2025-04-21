@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+    Posts
+{% endblock title %}
+{% block content %}
+    <h1>{{ visiteduser }}'s page</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% if is_following %}
+            <button type="submit" name="action" value="unfollow">Unfollow</button>
+        {% else %}
+            <button type="submit" name="action" value="follow">Follow</button>
+        {% endif %}
+    </form>
+    {% if user.is_authenticated %}
+        {% for post in visiteduser.posts.all %}
+            {% include 'component_post.html' with post=post %}
+        {% endfor %}
+    {% else %}
+        <p>please login to view posts</p>
+    {% endif %}
+{% endblock content %}

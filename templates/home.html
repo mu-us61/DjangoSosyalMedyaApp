@@ -21,7 +21,7 @@
                 <ul class="space-y-2">
                     {% for profile in suggested_users %}
                         <li class="flex justify-between items-center p-2 bg-gray-100 rounded-lg">
-                            <span>{{ profile.user.username }}</span>
+                            <a href=" {% url 'user' username=profile.user.username %} ">{{ profile.user.username }}</a>
                         </li>
                     {% endfor %}
                 </ul>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, login, logout, get_user
 from .models import Profile, Post
@@ -113,3 +113,37 @@ def postdetail(request):
 
 def myposts(request):
     return render(request, "myposts.html")
+
+
+def user(request, username):
+    visiteduser = User.objects.get(username=username)
+    is_following = False  # Default value
+    if request.user.is_authenticated:
+        is_following = request.user.profile.following.filter(id=visiteduser.profile.id).exists()
+    if request.method == "POST":
+        user = request.user
+        action = request.POST.get("action")
+        if action == "follow":
+            user.profile.following.add(visiteduser.profile)
+            visiteduser.profile.followers.add(user.profile)
+        elif action == "unfollow":
+            user.profile.following.remove(visiteduser.profile)
+            visiteduser.profile.followers.remove(user.profile)
+        # Recalculate `is_following` after the action
+        is_following = request.user.profile.following.filter(id=visiteduser.profile.id).exists()
+
+    return render(request, "user.html", {"visiteduser": visiteduser, "is_following": is_following})
+
+
+@login_required
+def toggle_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+
+    if user in post.likes.all():
+        post.likes.remove(user)  # Unlike the post
+    else:
+        post.likes.add(user)  # Like the post
+
+    # Redirect back to the referring page or a default URL
+    return redirect(request.META.get("HTTP_REFERER", "/"))

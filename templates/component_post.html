@@ -1,12 +1,70 @@
 <div class="mb-6 p-4 border rounded-lg shadow-sm">
-    <p class="font-bold">{{ post.user.username }}: {{ post.caption }}</p>
+    <div class="flex items-center mb-2">
+        <a href="{% url 'user' post.user.username %}"
+           class="font-bold text-blue-500 hover:text-blue-700 transition-colors">{{ post.user.username }}</a>
+        <span class="ml-2 text-gray-500">posted:</span>
+    </div>
+    <p class="text-gray-800">
+        <span class="font-semibold">Caption:</span> {{ post.caption }}
+    </p>
     {% if post.image %}
         <img src="{{ post.image.url }}"
-             alt="Post image"
              width="300"
              height="200"
-             class="mt-2 w-full h-48 object-cover rounded">
+             alt="Post image"
+             class="mt-4 w-full h-48 object-cover rounded-lg">
     {% else %}
-        <p class="text-gray-500">No image available</p>
+        <p class="mt-4 text-gray-500">No image available</p>
     {% endif %}
+    <!-- Like Button and Counter -->
+    <div class="mt-4 flex items-center space-x-2">
+        <form method="post" action="{% url 'toggle_like' post.id %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center space-x-1">
+                <!-- Toggle heart icon based on whether the user has liked the post -->
+                {% if request.user in post.likes.all %}
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="red"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor"
+                         class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor"
+                         class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                    </svg>
+                {% endif %}
+                <span class="text-gray-700 font-medium">
+                    {% if request.user in post.likes.all %}
+                        Unlike
+                    {% else %}
+                        Like
+                    {% endif %}
+                </span>
+            </button>
+        </form>
+        <!-- Like Counter -->
+        <span class="text-gray-700 font-medium">{{ post.likes.count }} likes</span>
+    </div>
 </div>
+<!-- <div class="mb-6 p-4 border rounded-lg shadow-sm">
+    <div class="flex items-center mb-2">
+        <a href="{% url 'user' post.user.username %}" class="font-bold text-blue-500 hover:text-blue-700 transition-colors">{{ post.user.username }}</a>
+        <span class="ml-2 text-gray-500">posted:</span>
+    </div>
+    <p class="text-gray-800">
+        <span class="font-semibold">Caption:</span> {{ post.caption }}
+    </p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" width="300" height="200" alt="Post image" class="mt-4 w-full h-48 object-cover rounded-lg">
+    {% else %}
+        <p class="mt-4 text-gray-500">No image available</p>
+    {% endif %}
+</div> -->
