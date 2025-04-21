@@ -41,7 +41,7 @@ def myregister(request):
             else:
                 # TODO burda hata olursa nasil bildirir templatede ne gerekli
                 user = User.objects.create_user(username=username, password=password1)
-                Profile.objects.create(user=user)
+                # Profile.objects.create(user=user) created at modelspy via signals
                 login(request, user)
                 return redirect("home")
 
